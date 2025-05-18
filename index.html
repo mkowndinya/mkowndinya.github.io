@@ -1,43 +1,4 @@
-<script type="text/javascript">
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-          return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-            try {
-                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                var firstSheetName = workbook.SheetNames[0];
-                var worksheet = workbook.Sheets[firstSheetName];
-
-                // Convert sheet to JSON to filter blank rows
-                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                var headerRowIndex = filteredData.findIndex((row, index) =>
-                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                );
-                // Fallback
-                if (headerRowIndex === -1 || headerRowIndex > 25) {
-                  headerRowIndex = 0;
-                }
-
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                return csv;
-            } catch (e) {
-                console.error(e);
-                return "";
-            }
-        }
-        return gk_fileData[filename] || "";
-        }
-        </script><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -53,8 +14,8 @@
             <h1 class="text-4xl font-bold">Kowndinya Mannepalli</h1>
             <p class="text-lg mt-2">Site Reliability Engineer | Dynatrace Expert | Azure & Cloud Observability</p>
             <div class="mt-4">
-                <a href="https://linkedin.com/in/your-linkedin" class="text-blue-300 hover:underline">www.linkedin.com/in/kowndinyamv</a> |
-                <a href="mailto:kowndinya@example.com" class="text-blue-300 hover:underline">mkowndinya@gmail.com</a> |
+                <a href="https://linkedin.com/in/mkowndinya" class="text-blue-300 hover:underline">LinkedIn</a> |
+                <a href="mailto:mkowndinya@gmail.com" class="text-blue-300 hover:underline">mkowndinya@gmail.com</a> |
                 <a href="tel:+91-9030124561" class="text-blue-300 hover:underline">+91-9030124561</a>
             </div>
         </div>
@@ -154,7 +115,7 @@
 
     <!-- Footer -->
     <footer class="bg-blue-900 text-white py-6 text-center">
-        <p>&copy; 2025 Kowndinya Mannepalli. All rights reserved.</p>
+        <p>© 2025 Kowndinya Mannepalli. All rights reserved.</p>
     </footer>
 </body>
 </html>
