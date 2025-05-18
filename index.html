@@ -1,0 +1,160 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kowndinya Mannepalli - SRE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-100 font-roboto">
+    <!-- Header -->
+    <header class="bg-blue-900 text-white py-6">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl font-bold">Kowndinya Mannepalli</h1>
+            <p class="text-lg mt-2">Site Reliability Engineer | Dynatrace Expert | Azure & Cloud Observability</p>
+            <div class="mt-4">
+                <a href="https://linkedin.com/in/your-linkedin" class="text-blue-300 hover:underline">LinkedIn</a> |
+                <a href="mailto:kowndinya@example.com" class="text-blue-300 hover:underline">mkowndinya@gmail.com</a> |
+                <a href="tel:+91-9030124561" class="text-blue-300 hover:underline">+91-1234567890</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- About Section -->
+    <section class="py-10">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-blue-900 mb-6">About Me</h2>
+            <p class="text-gray-700 leading-relaxed">
+                Site Reliability Engineer with over 8.5 years of experience in CI/CD pipelines, infrastructure monitoring, and full-stack performance optimization. Expert in Dynatrace, Azure, and Kubernetes, I design robust monitoring systems and automation to ensure scalability and reliability. Passionate about enhancing customer experience through observability and performance strategies.
+            </p>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="bg-white py-10">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-blue-900 mb-6">Work Experience</h2>
+            <div class="space-y-8">
+                <div>
+                    <h3 class="text-xl font-semibold">Senior Consultant, Infosys</h3>
+                    <p class="text-gray-600">Jan 2022 - Present | Hyderabad, India</p>
+                    <ul class="list-disc ml-6 mt-2 text-gray-700">
+                        <li>Architected Dynatrace monitoring for 150+ hosts, reducing incidents by 30%.</li>
+                        <li>Integrated Dynatrace with Azure, AWS, and Kubernetes for unified observability.</li>
+                        <li>Built Azure AI bot using Dynatrace data, cutting support tickets by 25%.</li>
+                        <li>Designed real-time dashboards for peak sales, improving response time by 50%.</li>
+                        <li>Trained 15+ team members on Dynatrace, ensuring 99.9% availability.</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold">DevOps Engineer, Tata Consultancy Services</h3>
+                    <p class="text-gray-600">Nov 2016 - Jan 2022 | Hyderabad, India</p>
+                    <ul class="list-disc ml-6 mt-2 text-gray-700">
+                        <li>Managed IBM WebSphere upgrades and Git/SBM/JIRA administration.</li>
+                        <li>Automated deployment and backup using Perl and Windows scripts.</li>
+                        <li>Deployed applications across DEV, QA, STAGE, and PROD environments.</li>
+                        <li>Led SBM and QC ALM upgrades, enhancing documentation.</li>
+                        <li>Supported SDLC phases with troubleshooting and automation.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section class="py-10">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-blue-900 mb-6">Education</h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-xl font-semibold">Masters in Information Technology</h3>
+                    <p class="text-gray-600">JNTU Kakinada (CMU Curriculum), 2016</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold">B.Tech in Electrical & Electronics Engineering</h3>
+                    <p class="text-gray-600">JNTU, Andhra Pradesh, 2014</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="bg-white py-10">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-blue-900 mb-6">Technical Skills</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <ul class="list-disc ml-6 text-gray-700">
+                    <li>APM: Dynatrace, New Relic, Content Square</li>
+                    <li>Cloud: Azure (AZ-400, AZ-104), AWS</li>
+                    <li>DevOps: Jenkins, Git, Maven, Docker, Kubernetes</li>
+                    <li>Automation: Puppet, Veracode, Shell, Python</li>
+                </ul>
+                <ul class="list-disc ml-6 text-gray-700">
+                    <li>Performance Testing: NeoLoad, JMeter</li>
+                    <li>Configuration: IBM WebSphere, MS Orchestrator</li>
+                    <li>Ticketing: JIRA, SBM, ServiceNow</li>
+                    <li>Documentation: Confluence, Wiki</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section class="py-10">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-blue-900 mb-6">Certifications & Awards</h2>
+            <ul class="list-disc ml-6 text-gray-700">
+                <li>Dynatrace Certified Associate</li>
+                <li>Microsoft Certified: AZ-400, AZ-104</li>
+                <li>Infosys Insta Awards (2022-2025): Dynatrace dashboards, Apollo Project</li>
+                <li>Star Team Award (2020), AIG Galaxy Award (2017-2018)</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-blue-900 text-white py-6 text-center">
+        <p>&copy; 2025 Kowndinya Mannepalli. All rights reserved.</p>
+    </footer>
+</body>
+</html>
